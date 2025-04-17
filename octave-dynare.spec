@@ -38,7 +38,10 @@ Requires(postun): octave
 BuildSystem:	meson
 BuildOption:	-Dbuild_for=octave
 BuildOption:	-Dmathjax_path=/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-#BuildOption:	--buildtype=debugoptimized
+BuildOption:	--buildtype=debugoptimized
+
+%patchlist
+octave-dynare-6.3-fix_build.patch
 
 %description
 Dynare is a software platform for handling a wide class of economic 
@@ -63,4 +66,14 @@ aforementioned agent categories.
 %doc NEWS
 %dir %{octpkgdir}
 %{octpkgdir}/*
+%dir %{octpkglibdir}
+%{octpkglibdir}/*
+%{_metainfodir}/*.metainfo.xml
+
+#---------------------------------------------------------------------------
+
+%prep
+%autosetup -p1 -n %{octpkg}-%{version}
+
+sed -i 's,warning_level=2,warning_level=0,g' meson.build preprocessor/meson.build
 
